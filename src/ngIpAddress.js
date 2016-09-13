@@ -180,6 +180,21 @@
 						// Attach it to the final value
 						val += ':' + port
 					}
+					
+					// TODO - Use the config to enable / disable this feature.
+					// - Allow user to config the custom validty tracker. 
+					// - Allow them to define an array of .range() types they want to check for.
+					// If the ipaddr.js library is available (https://github.com/whitequark/ipaddr.js)
+					// we will use it to set the privateIpAddress validity tracker.
+					if (typeof $window.ipaddr !== 'undefined'){
+						ipaddr = $window.ipaddr;
+						if(ipaddr.isValid(val)) {
+							if(ipaddr.parse(val).range() === 'private') {
+								// Set private ip address validity tracker to false
+								ngModelCtrl.$setValidity('privateIpAddress', false);
+							}
+						}
+					}
 
 					// Set validity of field (will be displayed as class 'ng-valid-ip-address' or 'ng-invalid-ip-address')
 					ngModelCtrl.$setValidity('ipAddress', validationResult);
